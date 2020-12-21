@@ -71,9 +71,9 @@
         <img src="../static/img/3693.png" width="100%" height="100%">
         <div class="container">
           <div class="carousel-caption text-left" style="color: #000">
-            <h1>Example headline.</h1>
-            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-            <p><a class="btn btn-lg btn-success" href="#" role="button">Sign up today</a></p>
+            <h1>Monitorea tu planta.</h1>
+            <p>Si ya cuentas con un artefacto puedes consultar su estado en tiempo real ingresando aquí.</p>
+            <p><a class="btn btn-lg btn-success" href="{{ url_for('login') }}" role="button">Inicia sesión</a></p>
           </div>
         </div>
       </div>
@@ -81,9 +81,8 @@
         <img src="../static/img/asdf.png" width="100%" height="100%">
         <div class="container">
           <div class="carousel-caption">
-            <h1>Another example headline.</h1>
-            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-            <p><a class="btn btn-lg btn-success" href="#" role="button">Learn more</a></p>
+            <h1>¿Quiénes somos?</h1>
+            <p>Somos un equipo de alumnos de la universidad Diego Portales interesados en solventar las necesidad de aquellas personas que buscan empezar a cultivar sus propias plantaciones.</p>
           </div>
         </div>
       </div>
@@ -111,7 +110,8 @@
     <div class="row featurette" >
       <div class="col-md-7" >
         <h2 class="featurette-heading">Nuestro <span class="text-muted">producto:</span></h2>
-        <p class="lead">El producto consiste en la elaboración de un artefacto que permite al usuario mantener el control de las distintas variables, facilitandole al usuario mantener en las condiciones más optimas el cultivo que el usuario requiera.</p>
+        <p class="lead">El producto consiste en la elaboración de un artefacto que permite al usuario mantener
+           el control de las distintas variables, esto a través de la tecnología arduino que nos entrega una diversa cantidad de herramientas para desarrollar mediciones ambientales, facilitandole mantener en las condiciones más optimas el cultivo para un completo desarrollo de la planta.</p>
       </div>
       <div class="col-md-5">
         <img src="../static/img/diseno.png" width="600" height="450">
@@ -123,18 +123,18 @@
       <div class="col-lg-4">
         <img class="bd-placeholder-img rounded-circle" width="50%" height="50%" src="../static/img/sensorluz.png">
         <h2>Luminosidad</h2>
-        <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
+        <p>El sensor de fotoresistencia o resistencia a la luz, es una de las herramientas que arduino tiene para ofrecer. Su función es la de advertir sobre un posible sobre estímulo en los fotoreceptores de la planta.</p>
       </div><!-- /.col-lg-4 -->
       <div class="col-lg-4">
         <img class="bd-placeholder-img rounded-circle" width="50%" height="50%" src="../static/img/dth22.png">
         <h2>Temperatura y humedad ambiente</h2>
-        <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
+        <p>Ambos sensores que nos proporciona arduino tienen la función de permitir al usuario simular un ambiente propicio para el cultivo, estos sensores tienen la funcionalidad de informar sobre el estado del ambiente del cultivo.</p>
 
       </div><!-- /.col-lg-4 -->
       <div class="col-lg-4">
         <img class="bd-placeholder-img rounded-circle" width="50%" height="50%" src="../static/img/humedadsuelo.png">
         <h2>Humedad de suelo</h2>
-        <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+        <p>El sensor de humedad suelo permite al usuario medir la cantidad de agua que está suministrando a la planta, es importante debido a que no quiere ahogar su plantación</p>
 
       </div><!-- /.col-lg-4 -->
     </div><!-- /.row -->
@@ -146,11 +146,21 @@
 
     <div class="row featurette">
       <div class="col-md-7">
-        <h2 class="featurette-heading">First featurette heading. <span class="text-muted">It’ll blow your mind.</span></h2>
-        <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+        <h2 class="featurette-heading">¿Por qué tener un huerto? <span class="text-muted"></span></h2>
+        <br>
+        <ul>
+          <li>Te aseguras que son alimentos ecológicos</li>
+          <br>
+          <li>Mejoras tu hábitos alimenticios</li>
+          <br>
+          <li>Es una afición muy enriquecedora</li>
+          <br>
+          <li>Ahorras dinero con tu huerto urbano</li>
+          <br>
+          <li>Pones tu granito de arena en la creación de zonas verdes</li>
+        </ul>
       </div>
-      <div class="col-md-5">
-        <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 500x500"><title>Placeholder</title><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" fill="#aaa" dy=".3em">500x500</text></svg>
+      
       </div>
     </div>
 
@@ -172,3 +182,4 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
       <script>window.jQuery || document.write('<script src="../static/assets/js/vendor/jquery.slim.min.js"><\/script>')</script><script src="../static/assets/dist/js/bootstrap.bundle.min.js"></script>
 </html>
+
