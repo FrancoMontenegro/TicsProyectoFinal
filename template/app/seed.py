@@ -10,8 +10,8 @@ sql =""" insert INTO admins (rut, nombre, correo, pass)
 cur.execute(sql)
 conn.commit()
 
-sql =""" insert INTO artefactos (estado)
-					 values ('ACTIVO');
+sql =""" insert INTO artefactos (limMinTemp, limMaxTemp, limMinLuz, limMaxLuz, limMinHgnd, limMaxHgnd, limMinHamb, limMaxHamb, estado)
+					 values (0, 125, 0, 100, 0, 1023, 0, 100, 'ACTIVO');
 """
 cur.execute(sql)
 conn.commit()

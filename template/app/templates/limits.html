@@ -7,7 +7,7 @@
   <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
   <meta name="generator" content="Jekyll v4.1.1">
   <title>Dashboard - Huerto Inteligente</title>
-  
+
   <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/dashboard/">
 
   <!-- Bootstrap core CSS -->
@@ -62,7 +62,7 @@
         <div class="sidebar-sticky pt-3">
           <ul class="nav flex-column">
             <li class="nav-item">
-              <a class="nav-link active" href="#">
+              <a class="nav-link active" href="{{ url_for('dashboard') }}">
                 <span data-feather="home"></span>
                 Dashboard <span class="sr-only">(current)</span>
               </a>
@@ -92,7 +92,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('limits') }}">
+              <a class="nav-link" href="#">
                 <span data-feather="layers"></span>
                 Parámetros
               </a>
@@ -103,48 +103,49 @@
 
       <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
         <br>
-        {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            {% for message in messages %}
-              <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <span>{{ message }}</span>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-            {% endfor %}
-          {% endif %}
-        {% endwith %}
-        <div class="header">
-          <div class="graficos" id="temp">
-            <br>
-            <h2>
-              Temperatura
-            </h2>
+        <form action = "{{ url_for('dashboard') }}" method = "POST">
+          <h2>Limites temperatura</h2>
+          <div class="row">
+            <div class="col">
+              <input type="number" name="minTemp" class="form-control" placeholder="Mínimo" min="-40" max="125" required>
+            </div>
+            <div class="col">
+              <input type="number" name="maxTemp" class="form-control" placeholder="Máximo" min="-40" max="125" required>
+            </div>
           </div>
-
-          <div id="chart" class="chart">
+          <br>
+          <h2>Limites luminosidad</h2>
+          <div class="row">
+            <div class="col">
+              <input type="number" name="minLuz" class="form-control" placeholder="Mínimo" min="0" max="100" required>
+            </div>
+            <div class="col">
+              <input type="number" name="maxLuz" class="form-control" placeholder="Máximo" min="0" max="100" required>
+            </div>
           </div>
-        </div>
-        <div class="graficos" id="luz">
           <br>
-          <h2>Luminosidad</h2>
-          <div id="chart2" class="chart2">
-        </div>
-        </div>
-        <div class="graficos" id="humgnd">
+          <h2>Limites Humedad de suelo</h2>
+           <div class="row">
+            <div class="col">
+              <input type="number" name="minHgnd" class="form-control" placeholder="Mínimo" min="0" max="1023" required>
+            </div>
+            <div class="col">
+              <input type="number" name="maxHgnd" class="form-control" placeholder="Máximo" min="0" max="1023" required>
+            </div>
+          </div>
           <br>
-          <h2>Humedad de suelo</h2>
-          <div id="chart3" class="chart3">
-        </div>
-        </div>
-        <div class="graficos" id="humamb">
+          <h2>Limites Humedad ambiente</h2>
+           <div class="row">
+            <div class="col">
+              <input type="number" name="minHamb" class="form-control" placeholder="Mínimo" min="0" max="100" required>
+            </div>
+            <div class="col">
+              <input type="number" name="maxHamb" class="form-control" placeholder="Máximo" min="0" max="100" required>
+            </div>
+          </div>
           <br>
-          <h2>Humedad ambiente</h2>
-          <div id="chart4" class="chart4">
-        </div>
-        </div>
-
+          <button type="submit" class="btn btn-success btn-lg btn-block">Listo!</button>
+        </form>
       </main>
     </div>
   </div>
@@ -158,33 +159,4 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <!-- Plotly.js -->
-<script src="https://cdn.plot.ly/plotly-latest.min.js?_ga=2.34730721.1151238818.1607338864-1262515206.1607338864"></script> 
-<script type="text/javascript">
-
-  var graphs = {{graphJSON | safe}};
-
-  Plotly.plot('chart',graphs,{});        
-
-</script>
-<script type="text/javascript">
-
-  var graphs = {{graphJSON2 | safe}};
-
-  Plotly.plot('chart2',graphs,{});        
-
-</script>
-<script type="text/javascript">
-
-  var graphs = {{graphJSON3 | safe}};
-
-  Plotly.plot('chart3',graphs,{});        
-
-</script>
-<script type="text/javascript">
-
-  var graphs = {{graphJSON4 | safe}};
-
-  Plotly.plot('chart4',graphs,{});        
-
-</script>
-</html>
+<script src="https://cdn.plot.ly/plotly-latest.min.js?_ga=2.34730721.1151238818.1607338864-1262515206.1607338864"></script>

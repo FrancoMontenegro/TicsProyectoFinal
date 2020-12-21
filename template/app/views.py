@@ -1,5 +1,5 @@
 from app import app
-from flask import Flask,jsonify,request,redirect,url_for,session
+from flask import Flask,jsonify,request,redirect,url_for,session, flash
 from flask import render_template
 import json
 import plotly
@@ -16,6 +16,7 @@ import psycopg2
 conn = psycopg2.connect("dbname=%s user=%s password=%s"%(database,user,passwd))
 cur = conn.cursor()
 
+app.secret_key = "super secret key"
 
 @app.route('/')
 @app.route('/index')
@@ -85,11 +86,29 @@ def dataGenerator():
 	cur.execute(sql)
 	conn.commit()
 
-@app.route('/dashboard')
+@app.route('/dashboard', methods=['GET','POST'])
 def dashboard():
 
 	while True:
 		dataGenerator()
+		if request.method == "POST":
+
+			minTemp = request.form['minTemp']
+			maxTemp = request.form['maxTemp']
+			minLuz = request.form['minLuz']
+			maxLuz = request.form['maxLuz']
+			minHgnd = request.form['minHgnd']
+			maxHgnd = request.form['maxHgnd']
+			minHamb = request.form['minHamb']
+			maxHamb = request.form['maxHamb']
+
+			sql ="""update artefactos set limMinTemp = %s, limMaxTemp = %s, limMinLuz = %s, limMaxLuz = %s, limMinHgnd = %s, limMaxHgnd = %s, limMinHamb = %s, limMaxHamb = %s where artefactos.id = 1;
+			"""%(minTemp, maxTemp, minLuz, maxLuz, minHgnd, maxHgnd, minHamb, maxHamb)
+			cur.execute(sql)
+			conn.commit()
+
+			return redirect(url_for('dashboard'))
+
 		sql ="""select mediciones.temp, mediciones.luz, mediciones.hum_suelo, mediciones.hum_ambiente from mediciones where mediciones.artefacto_id = 1 order by mediciones.date;"""
 		cur.execute(sql)
 		dataResultados = cur.fetchall()
@@ -147,13 +166,99 @@ def dashboard():
 		graphJSON3 = json.dumps(data3, cls=plotly.utils.PlotlyJSONEncoder)
 		graphJSON4 = json.dumps(data4, cls=plotly.utils.PlotlyJSONEncoder)
 
+		sql =""" select artefactos.limMinTemp, artefactos.limMaxTemp, artefactos.limMinLuz, artefactos.limMaxLuz, artefactos.limMinHgnd, artefactos.limMaxHgnd, artefactos.limMinHamb, artefactos.limMaxHamb from artefactos where artefactos.id = 1;
+		"""
+		cur.execute(sql)
+		limites = cur.fetchall()
+		conn.commit()
+
+		alerta = False
+
+		if temperature[len(dataResultados)-1] < limites[0][0]:
+			alerta = True
+
+		if temperature[len(dataResultados)-1] > limites[0][1]:
+			alerta = True
+
+		if luminosity[len(dataResultados)-1] < limites[0][2]:
+			alerta = True
+
+		if luminosity[len(dataResultados)-1] > limites[0][3]:
+			alerta = True
+
+		if hum_gnd[len(dataResultados)-1] < limites[0][4]:
+			alerta = True
+
+		if hum_gnd[len(dataResultados)-1] > limites[0][5]:
+			alerta = True
+
+		if hum_amb[len(dataResultados)-1] < limites[0][6]:
+			alerta = True
+
+		if hum_amb[len(dataResultados)-1] > limites[0][7]:
+			alerta = True
+
+		if alerta == True:
+			flash("Parametro fuera de los límites establecidos","warning")
+
 		return render_template('dashboard.html', graphJSON=graphJSON, graphJSON2=graphJSON2, graphJSON3=graphJSON3, graphJSON4=graphJSON4)
 
-@app.route('/admindash')
+
+@app.route('/limits', methods=['GET','POST'])
+def limits():
+	return render_template('limits.html')
+
+@app.route('/admindash', methods=['GET','POST'])
 def admindash():
-	sql ="""select artefactos.id, users.rut, users.nombre, users.correo, users.pass, artefactos.estado from users, artefactos where users.artefacto_id = artefactos.id order by artefactos.id;"""
+
+	sql ="""select artefactos.id, users.rut, users.nombre, users.correo, users.pass, artefactos.estado from users, artefactos where users.artefacto_id = artefactos.id and artefactos.estado = 'ACTIVO' order by artefactos.id;"""
 	cur.execute(sql)
 	usuarios = cur.fetchall()
 	conn.commit()
+	if request.method == "POST":
+		
+		minTemp = request.form['minTemp']
+		maxTemp = request.form['maxTemp']
+		minLuz = request.form['minLuz']
+		maxLuz = request.form['maxLuz']
+		minHgnd = request.form['minHgnd']
+		maxHgnd = request.form['maxHgnd']
+		minHamb = request.form['minHamb']
+		maxHamb = request.form['maxHamb']
+		name = request.form['nombre']
+		rut = request.form['rut']
+		email = request.form['email']
+		contrasena = request.form['contrasena']
 
+		
+		sql ="""insert INTO artefactos (limMinTemp, limMaxTemp, limMinLuz, limMaxLuz, limMinHgnd, limMaxHgnd, limMinHamb, limMaxHamb, estado) values ('%s','%s','%s','%s','%s','%s','%s','%s','ACTIVO') returning artefactos.id;"""%(minTemp, maxTemp, minLuz, maxLuz, minHgnd, maxHgnd, minHamb, maxHamb)
+		cur.execute(sql)
+		newId = cur.fetchone()
+		conn.commit()
+
+		sql="""insert INTO users (rut, nombre, correo, pass, artefacto_id) values ('%s','%s','%s','%s','%s');
+		"""%(rut, name, email, contrasena, newId[0])
+		cur.execute(sql)
+		conn.commit()
+		return redirect(url_for('admindash'))
 	return render_template('admindash.html',usuarios=usuarios)
+
+@app.route('/crearUser', methods=['GET','POST'])
+def crearUser():
+
+	return render_template('crearUser.html')
+
+@app.route('/admindash/<user_id>', methods=['GET'])
+def deleteUser(user_id):
+
+	sql=""" update artefactos set estado = 'DISPONIBLE' where artefactos.id = '%s';
+	"""%(user_id)
+	cur.execute(sql)
+	conn.commit()
+	return redirect(url_for('admindash'))
+
+
+
+
+
+

@@ -74,17 +74,17 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('crearUser') }}">
+              <a class="nav-link" href="#adduser">
                 <span data-feather="shopping-cart"></span>
                 Añadir usuario
               </a>
             </li>
-            <!-- <li class="nav-item">
+            <li class="nav-item">
               <a class="nav-link" href="#reclamos">
                 <span data-feather="shopping-cart"></span>
                 Reclamos y sugerencias
               </a>
-            </li> -->
+            </li>
           </ul>
         </div>
       </nav>
@@ -92,39 +92,72 @@
       <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
         <div class="header">
           <br>
-          <h2>Usuarios</h2>
-          <div class="table-responsive" id="users">
-            <table class="table table-striped table-sm">
-              <thead>
-                <tr>
-                  <th>ID artefacto</th>
-                  <th>Rut</th>
-                  <th>Nombre</th>
-                  <th>Correo</th>
-                  <th>Contraseña</th>
-                  <th>Estado</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for user in usuarios %}
-                <tr>
-                  <td>{{user[0]}}</td>
-                  <td>{{user[1]}}</td>
-                  <td>{{user[2]}}</td>
-                  <td>{{user[3]}}</td>
-                  <td>{{user[4]}}</td>
-                  <td>{{user[5]}}</td>
-                  <td><a class="link" href="/admindash/{{user[0]}}" ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-                  </svg></a></td>
-
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
+          <form action = "{{ url_for('admindash') }}" method = "POST">
+            <h2>Añadir Artefacto</h2>
+            <label for="validationTemp">Límites temperatura</label>
+            <div class="row">
+              <div class="col">
+                <input type="number" id="validationTemp" name="minTemp" class="form-control" placeholder="Mínimo" min="-40" max="125" required>
+              </div>
+              <div class="col">
+                <input type="number" name="maxTemp" class="form-control" placeholder="Máximo" min="-40" max="125" required>
+              </div>
+            </div>
+            <br>
+            <label for="validationLuz">Límites luminosidad</label>
+            <div class="row">
+              <div class="col">
+                <input type="number" id="validationLuz" name="minLuz" class="form-control" placeholder="Mínimo" min="0" max="100" required>
+              </div>
+              <div class="col">
+                <input type="number" name="maxLuz" class="form-control" placeholder="Máximo" min="0" max="100" required>
+              </div>
+            </div>
+            <br>
+            <label for="validationHgnd">Límites humedad de suelo</label>
+            <div class="row">
+              <div class="col">
+                <input type="number" id="validationHgnd" name="minHgnd" class="form-control" placeholder="Mínimo" min="0" max="1023" required>
+              </div>
+              <div class="col">
+                <input type="number" name="maxHgnd" class="form-control" placeholder="Máximo" min="0" max="1023" required>
+              </div>
+            </div>
+            <br>
+            <label for="validationHamb">Límites humedad ambiente</label>
+            <div class="row">
+              <div class="col">
+                <input type="number" id="validationHamb" name="minHamb" class="form-control" placeholder="Mínimo" min="0" max="100" required>
+              </div>
+              <div class="col">
+                <input type="number" name="maxHamb" class="form-control" placeholder="Máximo" min="0" max="100" required>
+              </div>
+            </div>
+            <br>
+            <h2>Añadir Usuario</h2>
+            <div class="form-row">
+              <div class="col-md-4 mb-3">
+                <label for="validationDefault01">Nombre</label>
+                <input type="text" name="nombre" class="form-control" id="validationDefault01" placeholder="Nombre Apellido" value="Nombre Apellido" required>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="validationDefault02">Rut</label>
+                <input type="number" name="rut" class="form-control" id="validationDefault02" placeholder="Rut" value="Rut" required>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="validationDefaultUsername">Correo</label>
+                <input type="email" name="email" id="validationDefaultUsername" class="form-control" placeholder="Correo electrónico" required autofocus>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-6 mb-3">
+                <label for="validationDefault03">Contraseña</label>
+                <input type="text" name="contrasena" class="form-control" id="validationDefault03" placeholder="Contraseña" value="Contraseña" required>
+              </div>
+            </div>
+            
+            <button class="btn btn-success" type="submit">Crear usuario</button>
+          </form>
         </div>
 
       </main>

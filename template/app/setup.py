@@ -22,6 +22,14 @@ cur.execute(sql)
 sql ="""
 CREATE TABLE artefactos
 		   (id serial PRIMARY KEY,
+		    limMinTemp decimal,
+		    limMaxTemp decimal,
+		    limMinLuz decimal,
+		    limMaxLuz decimal,
+		    limMinHgnd decimal,
+		    limMaxHgnd decimal,
+		    limMinHamb decimal,
+		    limMaxHamb decimal,
 		    estado varchar(40));
 """
 cur.execute(sql)
