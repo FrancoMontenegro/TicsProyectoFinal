@@ -67,11 +67,11 @@ def validate():
 
 def dataGenerator():
 	temp = [9.3, 12.5, 17.4, 20.1, 20.7, 21.4, 22.0, 27.1, 30.4]
-	luz = [1, 2, 5, 7, 10, 12, 14, 20, 26]
+	luz = [50,45, 5, 7, 60, 32, 93, 20, 26]
 #0 sumergido en agua - 1023 en aire
 #600-700 ligeramente humedo
 #800-1023 suelo seco    
-	hum_suelo = [100, 300, 500, 600, 650, 700, 750, 800, 1023]    
+	hum_suelo = [0.100, 0.300, 0.500, 1.43, 0.650, 0.700, 0.750, 0.800, 1]    
 	hum_ambiente = [0, 3, 7, 10, 11, 15, 17, 25, 40]    
 	
 	temperatura = np.random.choice(temp, p=[0.02,0.03,0.05,0.2,0.26,0.2,0.2,0.03,0.01])    
@@ -256,6 +256,8 @@ def deleteUser(user_id):
 	cur.execute(sql)
 	conn.commit()
 	return redirect(url_for('admindash'))
+
+
 
 
 
