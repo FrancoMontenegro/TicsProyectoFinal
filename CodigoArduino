@@ -1,0 +1,135 @@
+#include <LiquidCrystal.h>
+LiquidCrystal lcd(7,6,5,4,3,2);
+int led=8;
+int led2 = 13;
+int LDRPin0 = 0;		
+int LDRReading0;		
+float Res0=10.0;	//Resistencia 
+int Temperatura = A3;
+int Humedad = A2;
+int Humedad_suelo = A4;
+int Sonido = 11;
+int PULSADOR = 10;
+void setup()
+{
+  lcd.begin(16, 2);
+  lcd.setCursor(0, 0);
+  lcd.print("    Huerto");
+  lcd.setCursor(0, 1);
+  lcd.print(" Inteligente ");
+  delay(1000);
+  lcd.setCursor(0, 1);
+  lcd.print("   Temp y  Luz    ");
+  Serial.begin(9600); //visualizar el monitor en serie
+  pinMode(led,OUTPUT);
+  pinMode(led2,OUTPUT);
+  pinMode(Sonido,OUTPUT);
+  pinMode(PULSADOR,INPUT);
+}
+void loop()
+{ 
+  
+  lcd.clear();
+  int Temp = analogRead(Temperatura); //Lectura
+  int Hum = analogRead(Humedad);
+  int Hum_s = analogRead(Humedad_suelo);
+  float volTT = Temp * 0.004882815;
+  float Humm = Hum * 0.004882815;
+  float T = (volTT - 0.5)*100;
+  LDRReading0 = analogRead(LDRPin0);	
+  float Vout0=LDRReading0*0.0048828125;     // Calculos LUZ
+  int lux0=500/(Res0*((5-Vout0)/Vout0));    
+  
+  double dV = LDRReading0;
+  double le = 100 - (dV/1023)*100;
+  int level = le;
+  Humm = (Humm - 0.7383)*100;
+  float Humedad_suel = Hum_s*0.004882815; 
+  Humedad_suel = Humedad_suel/1.75;
+  if(Humm < 0 ){
+  Humm = 0;}
+  if (Humedad_suel < 0){
+  Humedad_suel = 0;
+  }
+
+  lcd.setCursor(0,0); //Imprime en la primera linea
+  lcd.print("LUZ: ");
+  lcd.print(level);
+  lcd.print("%");
+  delay(500);
+
+  lcd.clear();
+  delay(500);
+  lcd.setCursor(0,0);
+  lcd.print("Temperatura");
+  lcd.setCursor(0,1);
+  lcd.print(T);
+  lcd.print("  C");
+  delay(2000);
+  if(T>42 || T <10){
+  digitalWrite(led2,HIGH);
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("    ALERTA");
+  lcd.setCursor(0,1);
+  lcd.print("  TEMPERATURA");
+  delay(1500); 
+  }
+  if(Humedad_suel < 0.1){
+  digitalWrite(led2,HIGH);
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("    ALERTA");
+  lcd.setCursor(0,1);
+  lcd.print(" HUMEDAD SUELO");
+  delay(1500); 
+  }
+  if(level < 10){
+  digitalWrite(led2,HIGH);
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("    ALERTA");
+  lcd.setCursor(0,1);
+  lcd.print(" NO HAY LUZ");
+  delay(1500); 
+  }
+  else{
+    digitalWrite(led2,LOW);
+  }
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Humedad");
+  lcd.setCursor(0,1);
+  lcd.print(Humm);	
+  delay(1500);
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Humedad Suelo");
+  lcd.setCursor(0,1);
+  lcd.print(Humedad_suel);
+  Serial.println(analogRead(A0));// imprime los valores
+  delay(1000);
+  
+  if(analogRead(A0)>10)
+  {
+    digitalWrite(led,HIGH);
+  }
+  if(analogRead(A0)<10)
+  {
+    digitalWrite(led,LOW);
+  }
+
+  if(digitalRead(PULSADOR) == LOW ){
+   	  noTone(Sonido);
+  }
+  else {
+      if (Humedad_suel > 0.60){
+      tone(Sonido,261);  
+  }
+  else{
+      noTone(Sonido);
+  }
+    
+  }
+  
+}
